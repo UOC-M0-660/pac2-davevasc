@@ -9,6 +9,7 @@ import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
 import edu.uoc.pac2.data.BooksInteractor
+import edu.uoc.pac2.data.FirestoreBookData.addBooksDataToFirestoreDatabase
 
 /**
  * An activity representing a list of Books.
@@ -22,6 +23,9 @@ class BookListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_list)
+
+        // Run once for add books to firestore db
+        //addBooksDataToFirestoreDatabase()
 
         // Init UI
         initToolbar()
