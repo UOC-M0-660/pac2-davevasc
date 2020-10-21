@@ -19,9 +19,9 @@ class MyApplication : Application() {
         // Init Room Database
         val dbR = Room.databaseBuilder(
                 applicationContext,
-                ApplicationDatabase::class.java, "books-database").build()
+                ApplicationDatabase::class.java, "books-db-2")
+                .build()
         // Init BooksInteractor
-        //val dbR = ApplicationDatabase.getInstance(applicationContext)
         booksInteractor = BooksInteractor(dbR.bookDao())
     }
 
@@ -33,16 +33,19 @@ class MyApplication : Application() {
         // Add Internet Check logic.
         val connectivityManager =
                 getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        //val activeNetwork = connectivityManager.activeNetwork
         val capabilities =
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
-            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                return true
+            when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    return true
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                    return true
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
+                    return true
+                }
             }
         }
         return false

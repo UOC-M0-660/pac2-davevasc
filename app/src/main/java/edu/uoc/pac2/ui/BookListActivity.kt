@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,6 +12,7 @@ import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
 import edu.uoc.pac2.data.BooksInteractor
+import kotlinx.coroutines.launch
 
 /**
  * An activity representing a list of Books.
@@ -19,19 +21,19 @@ class BookListActivity : AppCompatActivity() {
 
     private val TAG = "BookListActivity"
     private lateinit var adapter: BooksListAdapter
-
-    private lateinit var interactor: BooksInteractor
-
+    // Declare MyApplication variable
+    private var app: MyApplication? = null
     // Declare room data base interactor
-
+    private var interactor: BooksInteractor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_list)
 
-        val prueba = MyApplication().hasInternetConnection()
-
-        val interactor = MyApplication().getBooksInteractor()
+        // Set MyApplication in app variable
+        app = (applicationContext as? MyApplication)
+        // Get interactor form MyApplication activity
+        interactor = app?.getBooksInteractor()
 
         // Init UI
         initToolbar()
@@ -66,18 +68,21 @@ class BookListActivity : AppCompatActivity() {
 
     // TODO: Get Books and Update UI
     private fun getBooks() {
-        // First load local books
-        loadBooksFromLocalDb()
-        // If internet connection, then load form firestore and save to room
-        if (MyApplication().hasInternetConnection()) {
-            loadBooksFromOnlineDb()
+            // First load local books
+        lifecycleScope.launch {
+            loadBooksFromLocalDb()
         }
+            // If internet connection, then load form firestore and save to room
+            app?.hasInternetConnection()?.let {
+                if (it) {
+                    loadBooksFromOnlineDb()
+                }
+            }
     }
 
     // Load Books from Room
-    private fun loadBooksFromLocalDb() {
-        adapter.setBooks(interactor.getAllBooks())
-        throw NotImplementedError()
+    private suspend fun loadBooksFromLocalDb() {
+        interactor?.getAllBooks()?.let { adapter.setBooks(it) }
     }
 
     // Load Books from Firestore
@@ -97,13 +102,20 @@ class BookListActivity : AppCompatActivity() {
                     // Reload recycler view again with new book list
                     adapter.setBooks(books)
                     // Load firestore online books into local Room database
-                    saveBooksToLocalDatabase(books)
+                    lifecycleScope.launch {
+                        restartBooksInToLocalDatabase()
+                        saveBooksToLocalDatabase(books)
+                    }
                 }
     }
 
     // Save Books to Local Storage
-    private fun saveBooksToLocalDatabase(books: List<Book>) {
-        interactor.saveBooks(books)
-        throw NotImplementedError()
+    private suspend fun saveBooksToLocalDatabase(books: List<Book>) {
+        interactor?.saveBooks(books)
+    }
+
+    // Restart Books to Local Storage
+    private suspend fun restartBooksInToLocalDatabase() {
+        interactor?.resetBooks()
     }
 }

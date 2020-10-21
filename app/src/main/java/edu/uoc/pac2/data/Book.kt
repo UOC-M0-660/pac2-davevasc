@@ -7,12 +7,13 @@ import androidx.room.PrimaryKey
 /**
  * A book Model representing a piece of content.
  */
-@Entity
+@Entity (tableName = "books_table")
 data class Book(
-        @ColumnInfo (name = "author") var author: String? = null,
-        @ColumnInfo (name = "description") var description: String? = null,
-        @ColumnInfo (name = "publicationDate") var publicationDate: String? = null,
-        @ColumnInfo (name = "title") var title: String? = null,
-        @PrimaryKey var uid: Int? = null,
-        @ColumnInfo (name = "urlImage") var urlImage: String? = null,
+        @ColumnInfo (name = "author") val author: String? = null,
+        @ColumnInfo (name = "description") val description: String? = null,
+        @ColumnInfo (name = "publicationDate") val publicationDate: String? = null,
+        @ColumnInfo (name = "title") val title: String? = null,
+        @ColumnInfo (name = "uid") @PrimaryKey val uid: Int = 0,
+        @ColumnInfo (name = "urlImage") val urlImage: String? = null,
+        @ColumnInfo (name = "isActive") val isActive: Boolean = true,
 )
