@@ -21,6 +21,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -59,7 +62,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-    // TODO: Add Image Loading Library
+    // Image Loading Library
+    implementation 'com.squareup.picasso:picasso:2.71828'
     // Other Libraries
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
 }

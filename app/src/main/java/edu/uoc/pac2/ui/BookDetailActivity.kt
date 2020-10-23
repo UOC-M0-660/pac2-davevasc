@@ -3,16 +3,33 @@ package edu.uoc.pac2.ui
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import edu.uoc.pac2.R
+import com.google.android.material.snackbar.Snackbar
+import edu.uoc.pac2.databinding.ActivityBookDetailBinding
 
 /**
  * An activity representing a single Book detail screen.
  */
 class BookDetailActivity : AppCompatActivity() {
 
+    lateinit var binding: ActivityBookDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_book_detail)
+        binding = ActivityBookDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Support my custom action bar
+        setSupportActionBar(findViewById(binding.detailToolbar.id))
+        // Show the Up button in the action bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Set dummy action to floating button
+        binding.fab.setOnClickListener { view ->
+            Snackbar.make(view, "There is no action yet", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+
+
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -29,7 +46,7 @@ class BookDetailActivity : AppCompatActivity() {
             val itemID = intent.getIntExtra(BookDetailFragment.ARG_ITEM_ID, -1)
             val fragment = BookDetailFragment.newInstance(itemID)
             supportFragmentManager.beginTransaction()
-                    .add(R.id.frameLayout, fragment)
+                    .add(binding.frameLayout.id, fragment)
                     .commit()
         }
     }
