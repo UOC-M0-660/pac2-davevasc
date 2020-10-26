@@ -1,9 +1,14 @@
 package edu.uoc.pac2.ui
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import edu.uoc.pac2.R
+import edu.uoc.pac2.data.Book
 import edu.uoc.pac2.databinding.ActivityBookDetailBinding
 
 /**
@@ -12,23 +17,12 @@ import edu.uoc.pac2.databinding.ActivityBookDetailBinding
 class BookDetailActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityBookDetailBinding
+    var book: Book = Book()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Support my custom action bar
-        setSupportActionBar(findViewById(binding.detailToolbar.id))
-        // Show the Up button in the action bar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        // Set dummy action to floating button
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "There is no action yet", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
 
 
         // savedInstanceState is non-null when there is fragment state
@@ -44,21 +38,54 @@ class BookDetailActivity : AppCompatActivity() {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             val itemID = intent.getIntExtra(BookDetailFragment.ARG_ITEM_ID, -1)
-            val fragment = BookDetailFragment.newInstance(itemID)
+            val fragment = BookDetailFragment.newInstance(itemID) { item ->
+                // Load current book to book variable
+                book = item
+                // Load my custom action bar with current book image and parallax special effect
+                setMyActionBar()
+                // Share current book when clcik on floating button
+                binding.fab.setOnClickListener { shareData() }
+            }
             supportFragmentManager.beginTransaction()
                     .add(binding.frameLayout.id, fragment)
                     .commit()
         }
     }
 
-    // TODO: Override finish animation for actionbar back arrow
+    private fun setMyActionBar() {
+        setSupportActionBar(findViewById(binding.detailToolbar.id))
+        // Show the Up button in the action bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // Set book title in the action bar
+        binding.toolbarLayout.title = book.title
+        // Set book image into actionbar
+        Picasso.get().load(book.urlImage).into(binding.ivToolBarImage)
+    }
+
+    private fun shareData() {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Title: ${book.title}\nImageURL: ${book.urlImage}")
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, "Share to other apps..."))
+    }
+
+    // Override finish animation for actionbar back arrow
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
-    // TODO: Override finish animation for phone back button
+    // Override finish animation for phone back button
     override fun onBackPressed() {
         super.onBackPressed()
+        overridePendingTransition(R.anim.translate_in_bottom, R.anim.translate_out_bottom)
     }
 
 }

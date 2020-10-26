@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
  * A fragment representing a single Book detail screen.
  * This fragment is contained in a [BookDetailActivity].
  */
-class BookDetailFragment : Fragment() {
+class BookDetailFragment (private val itemListener: (item: Book)  -> Unit): Fragment() {
 
     // Declare MyApplication variable
     private var app: MyApplication? = null
@@ -28,14 +28,11 @@ class BookDetailFragment : Fragment() {
     private var interactor: BooksInteractor? = null
 
     private lateinit var binding: FragmentBookDetailBinding
-    private lateinit var bindingActivity: ActivityBookDetailBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Get this view associating with the correct layout
         binding = FragmentBookDetailBinding.inflate(inflater, container, false)
-        bindingActivity = ActivityBookDetailBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -51,28 +48,27 @@ class BookDetailFragment : Fragment() {
         loadBook()
     }
 
-
     // Get Book for the given {@param ARG_ITEM_ID} Book id
     private fun loadBook() {
         val id = arguments?.getInt(ARG_ITEM_ID)
         lifecycleScope.launch {
             val book = id?.let { interactor?.getBookById(it) }
-            if (book != null) {
-                initUI(book)
+            book?.let {
+                itemListener(it)
+                initUI(it)
             }
         }
     }
 
-    // TODO: Init UI with book details
+    // Init UI with book details
     private fun initUI(book: Book?) {
-        activity?.findViewById<CollapsingToolbarLayout>(bindingActivity.toolbarLayout.id)?.title = book?.title
-        Picasso.get().load(book?.urlImage).into(binding.ivUrl)
         binding.tvAutor.text = book?.author
         binding.tvFecha.text = book?.publicationDate
         binding.tvDesc.text = book?.description
     }
 
-    // TODO: Share Book Title and Image URL
+    // Share Book Title and Image URL,
+    // Better in the BookDetailActivity
     private fun shareContent(book: Book) {
 
     }
@@ -84,8 +80,8 @@ class BookDetailFragment : Fragment() {
          */
         const val ARG_ITEM_ID = "itemIdKey"
 
-        fun newInstance(itemId: Int): BookDetailFragment {
-            val fragment = BookDetailFragment()
+        fun newInstance(itemId: Int, itemListener: (item: Book) -> Unit): BookDetailFragment {
+            val fragment = BookDetailFragment() { item -> itemListener(item) }
             val arguments = Bundle()
             arguments.putInt(ARG_ITEM_ID, itemId)
             fragment.arguments = arguments

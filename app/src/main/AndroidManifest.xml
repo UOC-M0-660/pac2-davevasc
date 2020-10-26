@@ -25,6 +25,7 @@
         <activity
             android:name="edu.uoc.pac2.ui.BookDetailActivity"
             android:label="@string/title_book_detail"
+            android:theme="@style/AppTheme.NoActionBar.Translucent"
             android:parentActivityName="edu.uoc.pac2.ui.BookListActivity"/>
     </application>
 

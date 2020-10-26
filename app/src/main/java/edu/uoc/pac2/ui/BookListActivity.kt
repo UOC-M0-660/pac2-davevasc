@@ -73,6 +73,8 @@ class BookListActivity : AppCompatActivity() {
             putExtra(BookDetailFragment.ARG_ITEM_ID, item.uid)
         }
         startActivity(intent)
+        // Set animation: Detail is oppening from down to top
+        overridePendingTransition(R.anim.translate_in_top, R.anim.translate_out_top)
     }
 
     // TODO: Get Books and Update UI
@@ -107,13 +109,14 @@ class BookListActivity : AppCompatActivity() {
                         return@addSnapshotListener
                     }
                     // Save books in kotlin structure
-                    val books: List<Book> = value!!.documents.mapNotNull { it.toObject(Book::class.java) }
-                    // Reload recycler view again with new book list
-                    adapter.setBooks(books)
-                    // Load firestore online books into local Room database
-                    lifecycleScope.launch {
-                        restartBooksInToLocalDatabase()
-                        saveBooksToLocalDatabase(books)
+                    value?.let{ coll -> val books: List<Book> = coll.documents.mapNotNull { doc -> doc.toObject(Book::class.java) }
+                        // Reload recycler view again with new book list
+                        adapter.setBooks(books)
+                        // Load firestore online books into local Room database
+                        lifecycleScope.launch {
+                            restartBooksInToLocalDatabase()
+                            saveBooksToLocalDatabase(books)
+                        }
                     }
                 }
     }
