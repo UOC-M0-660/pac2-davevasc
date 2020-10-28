@@ -10,6 +10,8 @@
     <string name="autor">autor</string>
     <string name="image_desc">image_desc</string>
     <string name="example_date">example_date</string>
-    <string name="book_desc">Make sure to sync your gradle file after inserting this line of code. Now we will write the magic line of code that does the fetching of the image for us. In the case where you wouldn’t be able to use this dependency you would have to write about 70 lines of code to create a similar but smaller framework. This framework has some really cool features which we will not cover today, but it is nice to mention them. This framework can download images and save them to the device, it can cache the images for a specific session, and many more. Today we will only display the image, not download it. Eventually I will do a cache tutorial on android because it is a fun topic. Now lets show you that magic line of code</string>
+    <string name="book_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</string>
     <string name="book_image">Book Image</string>
+    <string name="admob_app_id">ca-app-pub-2462480066215030~8454557597</string>
+    <string name="admob_ban_id">ca-app-pub-2462480066215030/5053873791</string>
 </resources>

@@ -16,7 +16,7 @@ import edu.uoc.pac2.databinding.ActivityBookDetailBinding
  */
 class BookDetailActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityBookDetailBinding
+    private lateinit var binding: ActivityBookDetailBinding
     var book: Book = Book()
 
     override fun onCreate(savedInstanceState: Bundle?) {

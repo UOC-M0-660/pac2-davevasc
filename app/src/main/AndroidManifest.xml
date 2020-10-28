@@ -13,6 +13,10 @@
         android:theme="@style/AppTheme"
         android:allowBackup="true"
         android:fullBackupContent="true">
+        <!-- Add AdMob App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id"/>
         <activity
             android:name="edu.uoc.pac2.ui.BookListActivity"
             android:label="@string/app_name">

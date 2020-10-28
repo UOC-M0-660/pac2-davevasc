@@ -4,22 +4,28 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
 import edu.uoc.pac2.data.BooksInteractor
+import edu.uoc.pac2.databinding.ActivityBookListBinding
+import kotlinx.android.synthetic.main.view_book_list.view.*
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * An activity representing a list of Books.
  */
 class BookListActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityBookListBinding
     private val TAG = "BookListActivity"
     private lateinit var adapter: BooksListAdapter
     // Declare MyApplication variable
@@ -29,12 +35,16 @@ class BookListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_book_list)
+        binding = ActivityBookListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Set MyApplication in app variable
         app = (applicationContext as? MyApplication)
         // Get interactor form MyApplication activity
         interactor = app?.getBooksInteractor()
+
+        // Load Ads in the banner (initializated in MyApplication)
+        binding.adView.loadAd(AdRequest.Builder().build())
 
         // Init UI
         initToolbar()
@@ -51,20 +61,21 @@ class BookListActivity : AppCompatActivity() {
 
     // Init Top Toolbar
     private fun initToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        toolbar.title = title
+        //val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.title = title
     }
 
     // Init RecyclerView
     private fun initRecyclerView() {
-        val recyclerView = findViewById<RecyclerView>(R.id.book_list)
+        //val recyclerView = findViewById<RecyclerView>(R.id.book_list)
         // Set Layout Manager
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+        //binding.frameLayout.book_list.
+        binding.frameLayout.book_list.layoutManager = layoutManager
         // Init Adapter
         adapter = BooksListAdapter(emptyList()) { item -> doClick(item) }
-        recyclerView.adapter = adapter
+        binding.frameLayout.book_list.adapter = adapter
     }
 
     // Creating method to make it look simpler

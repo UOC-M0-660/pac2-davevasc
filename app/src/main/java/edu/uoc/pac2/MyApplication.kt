@@ -5,7 +5,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.room.Room
-import edu.uoc.pac2.data.*
+import com.google.android.gms.ads.MobileAds
+import edu.uoc.pac2.data.ApplicationDatabase
+import edu.uoc.pac2.data.BooksInteractor
+
 
 /**
  * Entry point for the Application.
@@ -16,11 +19,15 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Init the Mobile Ads SDK.
+        MobileAds.initialize(applicationContext)
+
         // Init Room Database
         val dbR = Room.databaseBuilder(
                 applicationContext,
                 ApplicationDatabase::class.java, "books-db-2")
                 .build()
+
         // Init BooksInteractor
         booksInteractor = BooksInteractor(dbR.bookDao())
     }
