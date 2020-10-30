@@ -8,8 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
@@ -18,13 +16,13 @@ import edu.uoc.pac2.data.BooksInteractor
 import edu.uoc.pac2.databinding.ActivityBookListBinding
 import kotlinx.android.synthetic.main.view_book_list.view.*
 import kotlinx.coroutines.launch
-import java.util.*
 
 /**
  * An activity representing a list of Books.
  */
 class BookListActivity : AppCompatActivity() {
 
+    // ListActivity Binding var
     private lateinit var binding: ActivityBookListBinding
     private val TAG = "BookListActivity"
     private lateinit var adapter: BooksListAdapter
@@ -61,14 +59,12 @@ class BookListActivity : AppCompatActivity() {
 
     // Init Top Toolbar
     private fun initToolbar() {
-        //val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = title
     }
 
     // Init RecyclerView
     private fun initRecyclerView() {
-        //val recyclerView = findViewById<RecyclerView>(R.id.book_list)
         // Set Layout Manager
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         //binding.frameLayout.book_list.
@@ -79,7 +75,7 @@ class BookListActivity : AppCompatActivity() {
     }
 
     // Creating method to make it look simpler
-    fun doClick(item: Book) {
+    private fun doClick(item: Book) {
         val intent = Intent(this, BookDetailActivity::class.java).apply {
             putExtra(BookDetailFragment.ARG_ITEM_ID, item.uid)
         }
@@ -88,9 +84,9 @@ class BookListActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.translate_in_top, R.anim.translate_out_top)
     }
 
-    // TODO: Get Books and Update UI
+    // Get Books and Update UI
     private fun getBooks() {
-            // First load local books
+            // First try to load local books
         lifecycleScope.launch {
             loadBooksFromLocalDb()
         }
@@ -120,10 +116,11 @@ class BookListActivity : AppCompatActivity() {
                         return@addSnapshotListener
                     }
                     // Save books in kotlin structure
-                    value?.let{ coll -> val books: List<Book> = coll.documents.mapNotNull { doc -> doc.toObject(Book::class.java) }
+                    value?.let{ coll ->
+                        val books: List<Book> = coll.documents.mapNotNull { doc -> doc.toObject(Book::class.java) }
                         // Reload recycler view again with new book list
                         adapter.setBooks(books)
-                        // Load firestore online books into local Room database
+                        // Restart local books and Save firestore online books into local Room database
                         lifecycleScope.launch {
                             restartBooksInToLocalDatabase()
                             saveBooksToLocalDatabase(books)

@@ -17,7 +17,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <!-- Style for transparent toolbar  -->
     <style name="AppTheme.NoActionBar.Translucent" parent="AppTheme.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

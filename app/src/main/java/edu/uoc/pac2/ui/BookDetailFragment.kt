@@ -6,13 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.squareup.picasso.Picasso
 import edu.uoc.pac2.MyApplication
-import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
 import edu.uoc.pac2.data.BooksInteractor
-import edu.uoc.pac2.databinding.ActivityBookDetailBinding
 import edu.uoc.pac2.databinding.FragmentBookDetailBinding
 import kotlinx.coroutines.launch
 
@@ -20,7 +16,7 @@ import kotlinx.coroutines.launch
  * A fragment representing a single Book detail screen.
  * This fragment is contained in a [BookDetailActivity].
  */
-class BookDetailFragment (private val itemListener: (item: Book)  -> Unit): Fragment() {
+class BookDetailFragment (private val itemListener: (item: Book) -> Unit): Fragment() {
 
     // Declare MyApplication variable
     private var app: MyApplication? = null
@@ -67,11 +63,10 @@ class BookDetailFragment (private val itemListener: (item: Book)  -> Unit): Frag
         binding.tvDesc.text = book?.description
     }
 
-    // Share Book Title and Image URL,
-    // Better in the BookDetailActivity
-    private fun shareContent(book: Book) {
+    // Done better in the BookDetailActivity
+    //private fun shareContent(book: Book) {
 
-    }
+    //}
 
     companion object {
         /**
@@ -81,7 +76,7 @@ class BookDetailFragment (private val itemListener: (item: Book)  -> Unit): Frag
         const val ARG_ITEM_ID = "itemIdKey"
 
         fun newInstance(itemId: Int, itemListener: (item: Book) -> Unit): BookDetailFragment {
-            val fragment = BookDetailFragment() { item -> itemListener(item) }
+            val fragment = BookDetailFragment { item -> itemListener(item) }
             val arguments = Bundle()
             arguments.putInt(ARG_ITEM_ID, itemId)
             fragment.arguments = arguments

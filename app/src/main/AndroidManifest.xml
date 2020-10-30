@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Add custom style for detail activity -->
         <activity
             android:name="edu.uoc.pac2.ui.BookDetailActivity"
             android:label="@string/title_book_detail"

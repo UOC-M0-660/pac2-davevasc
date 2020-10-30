@@ -1,10 +1,8 @@
 package edu.uoc.pac2.ui
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import edu.uoc.pac2.R
@@ -16,6 +14,7 @@ import edu.uoc.pac2.databinding.ActivityBookDetailBinding
  */
 class BookDetailActivity : AppCompatActivity() {
 
+    // Declare binding for content view
     private lateinit var binding: ActivityBookDetailBinding
     var book: Book = Book()
 
@@ -53,15 +52,16 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     private fun setMyActionBar() {
-        setSupportActionBar(findViewById(binding.detailToolbar.id))
+        setSupportActionBar(binding.detailToolbar)
         // Show the Up button in the action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         // Set book title in the action bar
         binding.toolbarLayout.title = book.title
-        // Set book image into actionbar
+        // Set book image into actionbar with paralax effect
         Picasso.get().load(book.urlImage).into(binding.ivToolBarImage)
     }
 
+    // Share like text, book title and image url when push share button
     private fun shareData() {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND

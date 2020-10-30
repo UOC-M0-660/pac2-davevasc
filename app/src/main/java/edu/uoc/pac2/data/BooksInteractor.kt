@@ -1,7 +1,5 @@
 package edu.uoc.pac2.data
 
-import androidx.lifecycle.LiveData
-
 /**
  * This class Interacts with {@param bookDao} to perform operations in the local database.
  *
@@ -18,7 +16,7 @@ class BooksInteractor(private val bookDao: BookDao) {
     }
 
     // Save Book
-    suspend fun saveBook(book: Book) {
+    private suspend fun saveBook(book: Book) {
         bookDao.saveBook(book)
     }
 
@@ -32,7 +30,7 @@ class BooksInteractor(private val bookDao: BookDao) {
         return bookDao.getBookById(id)
     }
 
-    // Update List of Books
+    // Reset List of Books
     suspend fun resetBooks() {
         bookDao.resetBooks()
     }

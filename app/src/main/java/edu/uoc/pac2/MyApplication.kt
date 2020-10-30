@@ -36,6 +36,7 @@ class MyApplication : Application() {
         return booksInteractor
     }
 
+    // Ask if there is internet connection in the device
     fun hasInternetConnection(): Boolean {
         // Add Internet Check logic.
         val connectivityManager =

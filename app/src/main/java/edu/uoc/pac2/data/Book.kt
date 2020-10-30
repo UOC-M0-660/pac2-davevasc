@@ -6,7 +6,9 @@ import androidx.room.PrimaryKey
 
 /**
  * A book Model representing a piece of content.
+ * isActive is true, because we created book when load form firestore
  */
+
 @Entity (tableName = "books_table")
 data class Book(
         @ColumnInfo (name = "author") val author: String? = null,

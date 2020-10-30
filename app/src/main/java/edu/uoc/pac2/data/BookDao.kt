@@ -1,6 +1,5 @@
 package edu.uoc.pac2.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,7 +11,6 @@ import androidx.room.Query
 @Dao
 interface BookDao {
     @Query("SELECT * FROM books_table WHERE isActive = 1")
-    //@Query("SELECT * FROM books_table")
     suspend fun getAllBooks(): List<Book>
 
     @Query("SELECT * FROM books_table WHERE uid = :id")
