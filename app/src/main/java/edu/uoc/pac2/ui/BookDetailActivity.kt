@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
@@ -12,7 +13,7 @@ import edu.uoc.pac2.databinding.ActivityBookDetailBinding
 /**
  * An activity representing a single Book detail screen.
  */
-class BookDetailActivity : AppCompatActivity() {
+class BookDetailActivity : AppCompatActivity(), BookDetailFragment.OnBookSelectedListener {
 
     // Declare binding for content view
     private lateinit var binding: ActivityBookDetailBinding
@@ -37,18 +38,27 @@ class BookDetailActivity : AppCompatActivity() {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             val itemID = intent.getIntExtra(BookDetailFragment.ARG_ITEM_ID, -1)
-            val fragment = BookDetailFragment.newInstance(itemID) { item ->
-                // Load current book to book variable
-                book = item
-                // Load my custom action bar with current book image and parallax special effect
-                setMyActionBar()
-                // Share current book when clcik on floating button
-                binding.fab.setOnClickListener { shareData() }
-            }
+            val fragment = BookDetailFragment.newInstance(itemID)
             supportFragmentManager.beginTransaction()
                     .add(binding.frameLayout.id, fragment)
                     .commit()
         }
+    }
+
+    // Link Activity to BookFragment
+    override fun onAttachFragment(fragment: Fragment) {
+        if (fragment is BookDetailFragment) {
+            fragment.setOnBookSelectedListener(this)
+        }
+    }
+
+    // Get book from BookFragment
+    override fun onBookSelected(book: Book) {
+        this.book = book
+        // Load my custom action bar with current book image and parallax special effect
+        setMyActionBar()
+        // Share current book when clcik on floating button
+        binding.fab.setOnClickListener { shareData() }
     }
 
     private fun setMyActionBar() {

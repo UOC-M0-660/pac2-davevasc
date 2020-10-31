@@ -16,7 +16,21 @@ import kotlinx.coroutines.launch
  * A fragment representing a single Book detail screen.
  * This fragment is contained in a [BookDetailActivity].
  */
-class BookDetailFragment (private val itemListener: (item: Book) -> Unit): Fragment() {
+class BookDetailFragment: Fragment() {
+
+    private lateinit var callback: OnBookSelectedListener
+
+    // Link to BookActiviy
+    fun setOnBookSelectedListener(callback: OnBookSelectedListener) {
+        this.callback = callback
+    }
+
+    // This interface can be implemented by the Activity, parent Fragment,
+    // or a separate test implementation.
+    // Interface for communication between Fragment to Activity
+    interface OnBookSelectedListener {
+        fun onBookSelected(book: Book)
+    }
 
     // Declare MyApplication variable
     private var app: MyApplication? = null
@@ -50,7 +64,7 @@ class BookDetailFragment (private val itemListener: (item: Book) -> Unit): Fragm
         lifecycleScope.launch {
             val book = id?.let { interactor?.getBookById(it) }
             book?.let {
-                itemListener(it)
+                callback.onBookSelected(it)
                 initUI(it)
             }
         }
@@ -75,8 +89,8 @@ class BookDetailFragment (private val itemListener: (item: Book) -> Unit): Fragm
          */
         const val ARG_ITEM_ID = "itemIdKey"
 
-        fun newInstance(itemId: Int, itemListener: (item: Book) -> Unit): BookDetailFragment {
-            val fragment = BookDetailFragment { item -> itemListener(item) }
+        fun newInstance(itemId: Int): BookDetailFragment {
+            val fragment = BookDetailFragment()
             val arguments = Bundle()
             arguments.putInt(ARG_ITEM_ID, itemId)
             fragment.arguments = arguments
